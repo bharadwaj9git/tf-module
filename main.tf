@@ -56,10 +56,8 @@ resource "null_resource" "main" {
 
   provisioner "remote-exec" {
     inline = [
-      "sudo labauto ansible",
       "ansible-pull -i loacalhost, -U https://github.com/bharadwaj9git/anisble_expense.git -e role_name=${var.name} -e env=${var.env} expense.yml"
     ]
-
   }
 }
 
