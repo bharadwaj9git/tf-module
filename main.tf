@@ -48,7 +48,7 @@ resource "null_resource" "main" {
   depends_on = [aws_route53_record.main]
 
   connection {
-    host     = aws_instance.main.public_ip
+    host     = aws_instance.main.private_ip
     user     = "ec2-user"
     password = "DevOps321"
     type     = "ssh"
