@@ -41,12 +41,12 @@ resource "aws_route53_record" "main" {
   name    = "${var.name}-${var.env}.saidevops79.online"
   type    = "A"
   ttl     = 30
-  records = [aws_instance.node.private_ip]
+  records = [aws_instance.main.private_ip]
 }
 
 resource "null_resource" "main"{
-  depends_on =[aws_route53_record.dnf]
+  depends_on =[aws_route53_record.main]
   provisioner  "local-exec" {
-    command = "sleep 120;cd /home/ec2-user/ansible_expense; ansible-playbook -i ${aws_instance.node.private_ip}, -e ansible_user=ec2-user -e ansible_password=DevOps321  -e role_name=${var.name} -e env=${var.env} expense.yml"
+    command = "sleep 120;cd /home/ec2-user/ansible_expense; ansible-playbook -i ${aws_instance.main.private_ip}, -e ansible_user=ec2-user -e ansible_password=DevOps321  -e role_name=${var.name} -e env=${var.env} expense.yml"
   }
 }
