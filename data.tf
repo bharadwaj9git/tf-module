@@ -5,7 +5,7 @@ data "aws_route53_zone" "main"{
 
 data "aws_ami" "ami" {
   most_recent      = true
-  name_regex       = "golden-ami"
+  name_regex       = "test-image"
   owners           = ["self"]
 }
 
