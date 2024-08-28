@@ -16,6 +16,13 @@ resource "aws_security_group" "main" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
+  ingress {
+    from_port   = 9100
+    to_port     = 9100
+    protocol    = "tcp"
+    cidr_blocks = var.prometheus_servers
+  }
+
   egress {
     from_port        = 0
     to_port          = 0
@@ -36,6 +43,13 @@ Name = "${var.name}-${var.env}"
 }
 }
 
+# this to not recreate machines when tf apply this will not needed when ASG auto scaling group
+ lifecycle {
+    ignore_changes ={
+      "ami"
+    }
+ }
+
 resource "aws_route53_record" "main" {
   zone_id = data.aws_route53_zone.main.zone_id
   name    = "${var.name}-${var.env}.saidevops79.online"
@@ -46,6 +60,10 @@ resource "aws_route53_record" "main" {
 
 resource "null_resource" "main" {
   depends_on = [aws_route53_record.main]
+# if instance id changing then it will trigger, it will only for null resource
+  triggers = {
+    instance_id = aws_instance.main.id
+  }
 
   connection {
     host     = aws_instance.main.private_ip
